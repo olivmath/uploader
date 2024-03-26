@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload de Arquivo</title>
+</head>
+<body>
+    <h2>Upload de Arquivo</h2>
+    <!-- Removido o atributo 'action' e 'method' -->
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="arquivo" required>
+        <button type="button" onclick="uploadFile()">Enviar Arquivo</button>
+    </form>
+    <div>
+        <!-- Barra de progresso -->
+        <progress id="uploadProgress" value="0" max="100" style="width:100%;"></progress>
+    </div>
+    <script src="upload.js"></script>
+</body>
+</html>
