@@ -1,24 +1,24 @@
-const express = require('express');
-const multer  = require('multer');
-const os = require('os'); // Importando o módulo os
+const express = require("express");
+const multer = require("multer");
+const os = require("os"); // Importando o módulo os
 const app = express();
 const port = 3000;
 
 // Configuração do Multer (Definindo o diretório de destino dos uploads)
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: "uploads/" });
 
-app.use(express.static('public')); // Para servir arquivos estáticos como o HTML
+app.use(express.static("public")); // Para servir arquivos estáticos como o HTML
 
 // Rota para exibir o formulário de upload
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
 });
 
 // Rota para lidar com o upload do arquivo
 // O nome 'arquivo' deve corresponder ao nome do campo no formulário HTML
-app.post('/upload', upload.single('arquivo'), (req, res) => {
+app.post("/upload", upload.single("arquivo"), (req, res) => {
   console.log(req.file); // Informações do arquivo enviado
-  res.send('Arquivo recebido!');
+  res.send("Arquivo recebido!");
 });
 
 // Função para encontrar o endereço IP local
@@ -29,12 +29,13 @@ function getLocalIPAddress() {
 
     for (let i = 0; i < iface.length; i++) {
       const alias = iface[i];
-      if (alias.family === 4 && alias.address !== '127.0.0.1' && !alias.internal) {
+      if (alias.family === "IPv4" && alias.address !== "127.0.0.1") {
         return alias.address;
       }
     }
   }
-  return '0.0.0.0';
+
+  return "0.0.0.0";
 }
 
 const IP = getLocalIPAddress(); // Obtém o endereço IP local
