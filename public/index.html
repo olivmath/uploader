@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html lang="es"> <head>
+<html lang="es">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subir Archivo</title>
-    <link rel="stylesheet" href="styles.css"> </head>
+    <title>Upload de Arquivo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
 <body>
     <main class="container">
-        <h1>Subir Archivo</h1>
+        <h1>Upload de Arquivo</h1>
         <form id="uploadForm" enctype="multipart/form-data">
             <input type="file" name="arquivo" required>
             <button type="button" onclick="uploadFile()">Enviar</button>
+            <progress id="uploadProgress" value="0" max="100" style="display: none; height: 40px;"></progress>
         </form>
-        <progress id="uploadProgress" value="0" max="100"></progress>
     </main>
     <script src="upload.js"></script>
 </body>
