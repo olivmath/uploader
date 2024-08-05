@@ -1,6 +1,7 @@
 const express = require("express");
+const qrcode = require("qrcode");
 const multer = require("multer");
-const os = require("os"); // Importando o módulo os
+const os = require("os");
 const app = express();
 const port = 3000;
 
@@ -42,4 +43,9 @@ const IP = getLocalIPAddress(); // Obtém o endereço IP local
 
 app.listen(port, IP, () => {
   console.log(`Servidor rodando em http://${IP}:${port}`);
+
+  qrcode.toString(`http://${IP}:${port}`, { type: "terminal" }, (err, qr) => {
+    if (err) throw err;
+    console.log(qr);
+  });
 });
