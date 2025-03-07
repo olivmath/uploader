@@ -3,8 +3,20 @@ const qrcode = require("qrcode");
 const multer = require("multer");
 const path = require("path");
 const os = require("os");
+const cliProgress = require("cli-progress");
+const colors = require("ansi-colors");
+
 const app = express();
 const port = 3000;
+
+// Create progress bar
+const multibar = new cliProgress.MultiBar({
+  clearOnComplete: false,
+  hideCursor: true,
+  format: colors.cyan('{bar}') + ' | {filename} | {percentage}% | {value}/{total} ' + colors.cyan('{unit}'),
+  barCompleteChar: '\u2588',
+  barIncompleteChar: '\u2591',
+}, cliProgress.Presets.shades_classic);
 
 // Configuração do Multer (Definindo o diretório de destino dos uploads e usando o nome original)
 const upload = multer({
@@ -28,15 +40,49 @@ app.get("/", (req, res) => {
 });
 
 // Rota para lidar com o upload do arquivo
-// O nome 'arquivo' deve corresponder ao nome do campo no formulário HTML
-app.post("/upload", upload.single("arquivo"), (req, res) => {
-  // Informações do arquivo enviado
-  console.log("✅ Download Completed");
-  console.log(`👀 Nome: ${req.file.originalname}`);
-  console.log(`💽 Tamanho: ${formatarTamanhoArquivo(req.file.size)}`);
-  console.log(`💾 Salvo em: ${req.file.destination}`);
+app.post("/upload", (req, res) => {
+  const progressBars = new Map();
+  
+  // Handle file upload after tracking progress
+  const fileHandler = upload.single("arquivo");
 
-  res.send("Arquivo recebido!");
+  req.on('data', (chunk) => {
+    const fieldname = req.headers['content-disposition']?.match(/name="([^"]+)"/)?.[1];
+    if (!progressBars.has(fieldname)) {
+      const contentLength = parseInt(req.headers['content-length']);
+      const filename = req.headers['content-disposition']?.match(/filename="([^"]+)"/)?.[1] || 'Unknown file';
+      const bar = multibar.create(contentLength, 0, {
+        filename: filename,
+        unit: 'bytes'
+      });
+      progressBars.set(fieldname, { bar, progress: 0, total: contentLength });
+    }
+
+    const progress = progressBars.get(fieldname);
+    progress.progress += chunk.length;
+    progress.bar.update(progress.progress);
+  });
+
+  fileHandler(req, res, (err) => {
+    if (err) {
+      console.error("Error uploading file:", err);
+      return res.status(500).send("Error uploading file");
+    }
+
+    // Complete progress bars
+    progressBars.forEach(({ bar, progress, total }) => {
+      bar.update(total);
+      bar.stop();
+    });
+
+    // Log file information
+    console.log("\n✅ Download Completed");
+    console.log(`👀 Nome: ${req.file.originalname}`);
+    console.log(`💽 Tamanho: ${formatarTamanhoArquivo(req.file.size)}`);
+    console.log(`💾 Salvo em: ${req.file.destination}`);
+
+    res.send("Arquivo recebido!");
+  });
 });
 
 const IP = getLocalIPAddress(); // Obtém o endereço IP local
@@ -48,6 +94,7 @@ app.listen(port, IP, () => {
     if (err) throw err;
     console.log(qr);
   });
+  console.log("\nAguardando uploads... O progresso será mostrado abaixo:");
 });
 
 /// UTILS

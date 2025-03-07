@@ -1,19 +1,31 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload de Arquivo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Upload de Arquivos</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <main class="container">
-        <h1>Upload de Arquivo</h1>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" name="arquivo" required>
-            <button type="button" onclick="uploadFile()">Enviar</button>
-            <progress id="uploadProgress" value="0" max="100" style="display: none; height: 40px;"></progress>
-        </form>
+        <div class="upload-card">
+            <h1>Upload de Arquivos</h1>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="file-input-container">
+                    <label for="fileInput" class="file-input-label">
+                        <span class="file-input-text">Escolher arquivos</span>
+                        <input id="fileInput" type="file" name="arquivos" multiple required>
+                    </label>
+                </div>
+                <button type="button" onclick="uploadFiles()" class="upload-button">
+                    <span class="button-text">Enviar</span>
+                </button>
+                <div id="fileList" class="file-list"></div>
+            </form>
+        </div>
     </main>
     <script src="upload.js"></script>
 </body>
