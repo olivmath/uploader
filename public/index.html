@@ -13,15 +13,15 @@
     <main class="container">
         <div class="upload-card">
             <h1>Upload de Arquivos</h1>
-            <form id="uploadForm" enctype="multipart/form-data">
+            <form id="uploadForm" enctype="multipart/form-data" onsubmit="return false;">
                 <div class="file-input-container">
                     <label for="fileInput" class="file-input-label">
                         <span class="file-input-text">Escolher arquivos</span>
                         <input id="fileInput" type="file" name="arquivos" multiple required>
                     </label>
                 </div>
-                <button type="button" onclick="uploadFiles()" class="upload-button">
-                    <span class="button-text">Enviar</span>
+                <button type="button" id="mainUploadButton" onclick="uploadFiles()" class="upload-button" style="display: none;">
+                    <span class="button-text">Enviar Todos</span>
                 </button>
                 <div id="fileList" class="file-list"></div>
             </form>

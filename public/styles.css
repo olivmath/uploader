@@ -5,6 +5,8 @@
     --text-color: #333;
     --border-radius: 8px;
     --spacing: 20px;
+    --success-color: #4CAF50;
+    --error-color: #f44336;
 }
 
 * {
@@ -115,16 +117,29 @@ input[type="file"] {
     border-radius: var(--border-radius);
     padding: 12px;
     margin-bottom: 10px;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 2fr 1fr auto auto auto;
     gap: 10px;
     align-items: center;
 }
 
-.file-item span {
-    flex: 1;
+.file-name {
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-size {
+    color: #666;
+    font-size: 0.875rem;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     min-width: 150px;
-    word-break: break-all;
 }
 
 .file-item progress {
@@ -157,31 +172,68 @@ input[type="file"] {
     font-size: 0.875rem;
 }
 
+.item-upload-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.item-upload-button:hover {
+    background-color: var(--primary-hover);
+}
+
+.remove-button {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0 8px;
+    transition: color 0.3s ease;
+}
+
+.remove-button:hover {
+    color: var(--error-color);
+}
+
 /* Mobile Responsive Adjustments */
-@media (max-width: 480px) {
-    :root {
-        --spacing: 15px;
-    }
-
-    .upload-card {
-        padding: 15px;
-        margin: 10px;
-    }
-
-    h1 {
-        font-size: 1.25rem;
-    }
-
+@media (max-width: 768px) {
     .file-item {
-        padding: 10px;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "name remove"
+            "size size"
+            "progress progress"
+            "upload upload";
+        padding: 15px;
     }
 
-    .file-item span {
-        font-size: 0.875rem;
+    .file-name {
+        grid-area: name;
     }
 
-    .upload-button {
-        padding: 10px 20px;
+    .file-size {
+        grid-area: size;
+    }
+
+    .progress-container {
+        grid-area: progress;
+        width: 100%;
+    }
+
+    .item-upload-button {
+        grid-area: upload;
+        width: 100%;
+    }
+
+    .remove-button {
+        grid-area: remove;
     }
 }
 
